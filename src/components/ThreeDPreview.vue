@@ -6,14 +6,16 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
-import { renderer, scene, camera } from '../utils/threeDUtils';
+import { useThreeStore } from '../stores';
 import type { Ref } from 'vue';
 
 export default defineComponent({
     name: 'ThreeDPreview',
     setup() {
         const threeContainer: Ref<HTMLDivElement | undefined> = ref();
+        const store = useThreeStore();
 
+        const { renderer, scene, camera } = store;
 
         const initThree = () => {
             renderer.setSize(threeContainer.value!.offsetWidth, threeContainer.value!.offsetHeight);
