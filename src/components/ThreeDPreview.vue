@@ -15,17 +15,18 @@ export default defineComponent({
         const threeContainer: Ref<HTMLDivElement | undefined> = ref();
         const store = useThreeStore();
 
-        const { renderer, scene, camera } = store;
+        const { threeContext } = store;
 
         const initThree = () => {
-            renderer.setSize(threeContainer.value!.offsetWidth, threeContainer.value!.offsetHeight);
-            threeContainer.value!.appendChild(renderer.domElement);
+            threeContext.renderer.setSize(threeContainer.value!.offsetWidth, threeContainer.value!.offsetHeight);
+            threeContainer.value!.appendChild(threeContext.renderer.domElement);
         }
 
         onMounted(() => {
             initThree();
             const animate = () => {
                 requestAnimationFrame( animate );
+                const { renderer, scene, camera } = threeContext;
                 renderer.render( scene, camera );
             }
             animate();

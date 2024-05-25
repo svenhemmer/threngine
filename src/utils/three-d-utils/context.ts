@@ -17,9 +17,14 @@ const grid = assistanceGrid(scene);
 const activateAssistanceGrid = () => {
     grid.enable(true);
 }
+const deactivateAssistanceGrid = () => {
+    grid.enable(false);
+}
 
-export {
+activateAssistanceGrid();
+
+export const threeContext = {
     scene, camera, renderer, add2Scene,
 
-    activateAssistanceGrid
+    activateAssistanceGrid, deactivateAssistanceGrid
 }

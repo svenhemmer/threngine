@@ -1,19 +1,25 @@
 import { Scene, GridHelper } from "three";
 import type { AssistanceGrid } from "./models/assistance-grid";
 
-
-
 export const assistanceGrid: (scene: Scene) => AssistanceGrid = (scene: Scene) => {
-    const SIZE = 10;
-    const DIVISION = 10;
+    let _size = 10;
+    let _division = 10;
+    let _gripHelper: GridHelper;
 
-    const gridHelper = new GridHelper(SIZE, DIVISION);
-    scene.add(gridHelper);
     return {
         enable: (shouldEnable: boolean) => {
-            gridHelper.visible = shouldEnable;
+            console.log('Init grid!');
+            if (shouldEnable) {
+                _gripHelper = new GridHelper(_size, _division);
+                scene.add(_gripHelper);
+                console.log('Adding grid!');
+                
+            } else if(!!_gripHelper) {
+                scene.remove(_gripHelper);
+                console.log('Removing grid!');
+            }
         },
-        setSize: (size: number) => {},
-        setDivision: (division: number) => {}
+        setSize: (size: number) => { _size = size },
+        setDivision: (division: number) => { _division = division }
     }
 }

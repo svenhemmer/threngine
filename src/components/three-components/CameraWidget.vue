@@ -25,7 +25,7 @@ export default defineComponent({
     name: 'CameraWidget',
     setup() {
         const store = useThreeStore();
-        const { camera } = store;
+        const { camera } = store.threeContext;
 
         const changePosition = (event: Event, coord: 'x' | 'y' | 'z') => {
             const num = event2Number(event);
