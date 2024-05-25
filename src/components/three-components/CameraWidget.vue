@@ -1,14 +1,14 @@
 <template>
     <div>Camera Widget</div>
     <fieldset><legend>Position</legend>
-        <input :value="camera.position.x" @input="event => changePosition(event, 'x')">
-        <input :value="camera.position.y" @input="event => changePosition(event, 'y')">
-        <input :value="camera.position.z" @input="event => changePosition(event, 'z')">
+        <span>x: <input :value="camera.position.x" @input="event => changePosition(event, 'x')"></span>
+        <span>y: <input :value="camera.position.y" @input="event => changePosition(event, 'y')"></span>
+        <span>z: <input :value="camera.position.z" @input="event => changePosition(event, 'z')"></span>
     </fieldset>
     <fieldset><legend>Rotation</legend>
-        <input :value="camera.rotation.x" @input="event => changeRotation(event, 'x')">
-        <input :value="camera.rotation.y" @input="event => changeRotation(event, 'y')">
-        <input :value="camera.rotation.z" @input="event => changeRotation(event, 'z')">
+        <span>x: <input :value="camera.rotation.x" @input="event => changeRotation(event, 'x')"></span>
+        <span>y: <input :value="camera.rotation.y" @input="event => changeRotation(event, 'y')"></span>
+        <span>z: <input :value="camera.rotation.z" @input="event => changeRotation(event, 'z')"></span>
     </fieldset>
 </template>
 
@@ -67,3 +67,10 @@ export default defineComponent({
     }
 });
 </script>
+
+<style scoped>
+fieldset {
+    display: flex;
+    flex-direction: column;
+}
+</style>

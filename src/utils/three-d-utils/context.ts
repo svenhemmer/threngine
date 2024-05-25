@@ -32,7 +32,7 @@ activateAssistanceGrid();
 export const threeContext = {
     scene, camera, renderer, add2Scene,
 
-    activateAssistanceGrid, deactivateAssistanceGrid,
+    activateAssistanceGrid, deactivateAssistanceGrid, grid,
 
     resizeRatio
 }
