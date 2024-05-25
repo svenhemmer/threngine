@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, onBeforeUnmount, ref } from 'vue';
 import { useThreeStore } from '../stores';
 import type { Ref } from 'vue';
 
@@ -20,13 +20,20 @@ export default defineComponent({
         const initThree = () => {
             const width = threeContainer.value!.offsetWidth;
             const height = threeContainer.value!.offsetHeight;
-            threeContext.renderer.setSize(width, height);
             threeContext.resizeRatio({ width, height });
             threeContainer.value!.appendChild(threeContext.renderer.domElement);
         }
 
+        const onResize = () => {
+            // Border of 3 => subtract 6
+            const width = threeContainer.value!.offsetWidth - 6;
+            const height = threeContainer.value!.offsetHeight - 6;
+            threeContext.resizeRatio({ width, height });
+        }
+
         onMounted(() => {
             initThree();
+            window.addEventListener('resize', onResize);
             const animate = () => {
                 requestAnimationFrame( animate );
                 const { renderer, scene, camera } = threeContext;
@@ -34,6 +41,10 @@ export default defineComponent({
             }
             animate();
         });
+
+        onBeforeUnmount(() => {
+            window.removeEventListener('resize', onResize);
+        })
 
         return {
             threeContainer
@@ -55,5 +66,8 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
 </style>../utils/threeDUtils

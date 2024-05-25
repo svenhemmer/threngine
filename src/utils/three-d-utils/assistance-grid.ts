@@ -8,15 +8,12 @@ export const assistanceGrid: (scene: Scene) => AssistanceGrid = (scene: Scene) =
 
     return {
         enable: (shouldEnable: boolean) => {
-            console.log('Init grid!');
             if (shouldEnable) {
                 _gripHelper = new GridHelper(_size, _division);
                 scene.add(_gripHelper);
-                console.log('Adding grid!');
                 
             } else if(!!_gripHelper) {
                 scene.remove(_gripHelper);
-                console.log('Removing grid!');
             }
         },
         setSize: (size: number) => { _size = size },

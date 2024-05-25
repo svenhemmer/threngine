@@ -22,6 +22,7 @@ const deactivateAssistanceGrid = () => {
 }
 
 const resizeRatio = ({ width, height }: { width: number, height: number}) => {
+    renderer.setSize(width, height);
     camera.aspect = width/height;
     camera.updateProjectionMatrix();
 }
