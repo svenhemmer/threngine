@@ -1,6 +1,7 @@
 <template>
   <div class="main-grid">
-    <div class="left"><EntityTreeWidget></EntityTreeWidget></div>
+    <div class="tree"><EntityTreeWidget></EntityTreeWidget></div>
+    <div class="details"><DetailedWidget></DetailedWidget></div>
     <div class="main"><ThreeDPreview></ThreeDPreview></div>
   </div>
 </template>
@@ -8,6 +9,7 @@
 <script setup lang="ts">
  import EntityTreeWidget from './components/EntityTreeWidget.vue';
  import ThreeDPreview from './components/ThreeDPreview.vue';
+ import DetailedWidget from './components/DetailedWidget.vue';
 </script>
 
 <style>
@@ -16,9 +18,10 @@
   height: 100vh;
   display: grid;
   grid-template-columns: 20rem 1fr;
-  grid-template-rows: auto;
+  grid-template-rows: auto auto;
   grid-template-areas: 
-    "left main";
+    "tree main"
+    "details main";
   gap: .5rem;
 }
 
@@ -27,8 +30,12 @@
   padding: 2rem;
 }
 
-.left {
-  grid-area: left;
+.tree {
+  grid-area: tree;
+}
+
+.details {
+  grid-area: details;
 }
 
 .main {

@@ -1,0 +1,17 @@
+import { defineStore } from "pinia";
+import { shallowRef } from 'vue';
+
+import type { Ref } from 'vue';
+
+import CameraWidget from "../components/three-components/CameraWidget.vue";
+import SceneWidget from "../components/three-components/SceneWidget.vue";
+
+export const useSelectionStore = defineStore('selection', () => {
+    const widget: Ref<
+        null | 
+        typeof CameraWidget |
+        typeof SceneWidget
+    > = shallowRef(null);
+
+    return { widget }
+})
