@@ -1,8 +1,8 @@
 <template>
     <fieldset>
         <legend>Grid <input type="checkbox" :checked="gridActive" @change="activateGrid"></legend>
-        <span>Size: <input @change="setSize" :disabled="!gridActive" :value="size"></span>
-        <span>Division: <input @change="setDivision" :disabled="!gridActive" :value="divisions"></span>
+        <span>Size: <input @change="setSize" :disabled="!gridActive" v-model="size"></span>
+        <span>Division: <input @change="setDivision" :disabled="!gridActive" v-model="divisions"></span>
     </fieldset>
 </template>
 
@@ -32,8 +32,8 @@ export default defineComponent({
             const newSize = parseFloat(target.value);
             if (!!newSize) {
                 grid.setSize(newSize);
-                size.value = grid.getSize();
             }
+            size.value = grid.getSize();
         }
 
         const setDivision = (event: Event) => {
@@ -41,8 +41,8 @@ export default defineComponent({
             const newDivisions = parseFloat(target.value);
             if (!!newDivisions) {
                 grid.setDivision(newDivisions);
-                divisions.value = newDivisions;
             }
+            divisions.value = grid.getDivisions();
         }
 
         return {
