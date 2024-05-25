@@ -18,7 +18,10 @@ export default defineComponent({
         const { threeContext } = store;
 
         const initThree = () => {
-            threeContext.renderer.setSize(threeContainer.value!.offsetWidth, threeContainer.value!.offsetHeight);
+            const width = threeContainer.value!.offsetWidth;
+            const height = threeContainer.value!.offsetHeight;
+            threeContext.renderer.setSize(width, height);
+            threeContext.resizeRatio({ width, height });
             threeContainer.value!.appendChild(threeContext.renderer.domElement);
         }
 

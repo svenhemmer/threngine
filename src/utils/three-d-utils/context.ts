@@ -21,10 +21,17 @@ const deactivateAssistanceGrid = () => {
     grid.enable(false);
 }
 
+const resizeRatio = ({ width, height }: { width: number, height: number}) => {
+    camera.aspect = width/height;
+    camera.updateProjectionMatrix();
+}
+
 activateAssistanceGrid();
 
 export const threeContext = {
     scene, camera, renderer, add2Scene,
 
-    activateAssistanceGrid, deactivateAssistanceGrid
+    activateAssistanceGrid, deactivateAssistanceGrid,
+
+    resizeRatio
 }
