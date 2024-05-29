@@ -2,7 +2,7 @@
     <div>Element Widget</div>
     <div class="form">
         <fieldset><legend>Geometry</legend>
-            <span>Type: <select v-model="geoType">
+            <span>Type: <select v-model="geoType" @change="cleanup">
                 <option v-for="(geom, index) in geometries" :value="index">{{ geom.name }}</option>
             </select></span>
             <fieldset v-if="!!geometries[geoType].fields"><legend>Geometry specific</legend>
@@ -98,17 +98,21 @@ export default defineComponent({
             return /^#[0-9A-F]{6}$/i.test(color.value)
         }
 
-        const previewElement = () => {
-            const wrapper: GeometryWrapper = geometries[geoType.value];
-            
-            const { threeContext } = store;
+        const cleanup = () => {
             if (!!element && !!lines) {
+                const { threeContext } = store;
                 threeContext.scene.remove(lines);
                 threeContext.scene.remove(element);   
             }
+        }
+
+        const previewElement = () => {
+            cleanup();
             if (!validateNumberEntries() || !validateColorEntry()) {
                 return;
             }
+            const wrapper: GeometryWrapper = geometries[geoType.value];
+            const { threeContext } = store;
 
             const geometry = wrapper.create();
             geometry.rotateX(rx.value);
@@ -153,7 +157,8 @@ export default defineComponent({
             x, y, z,
             rx, ry, rz,
             color, geometries, geoType,
-            addElement, getFields, updateValue
+            addElement, getFields, updateValue,
+            cleanup
         }
     }
 })

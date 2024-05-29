@@ -37,12 +37,35 @@ const boxGeometry: GeometryWrapper = {
     }       
 }
 
+const circleFields = [
+    { name: 'Dimensions', sub: [
+        { name: 'Radius', field: createField('radius', 1) }
+    ]},
+    { name: 'Segments', sub: [
+        { name: 'Amount', field: createField('amount', 5) }
+    ]},
+    { name: 'Angle', sub: [
+        { name: 'Start', field: createField('start', 0) },
+        { name: 'End', field: createField('end', 2 * Math.PI) }
+    ]}
+];
+
 const circleGeometry: GeometryWrapper = {
     name: 'Circle',
+    fields: circleFields,
     position: { x: 1, y: 1, z: 1 },
     rotation: { x: 0, y: 0, z: 0 },
     create: () => {
-        const geom = new CircleGeometry(circleGeometry.position.x, circleGeometry.position.y, circleGeometry.position.z );
+        const geom = new CircleGeometry(
+            circleGeometry.fields![0].sub![0].field!.getValue() as number,
+            circleGeometry.fields![1].sub![0].field!.getValue() as number,
+            circleGeometry.fields![2].sub![0].field!.getValue() as number,
+            circleGeometry.fields![2].sub![1].field!.getValue() as number
+        );
+        geom.rotateX(boxGeometry.rotation.x);
+        geom.rotateY(boxGeometry.rotation.y);
+        geom.rotateZ(boxGeometry.rotation.z);
+        geom.translate(boxGeometry.position.x, boxGeometry.position.y, boxGeometry.position.z);
         return geom;
     }       
 }
