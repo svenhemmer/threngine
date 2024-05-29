@@ -36,8 +36,9 @@ export default defineComponent({
             window.addEventListener('resize', onResize);
             const animate = () => {
                 requestAnimationFrame( animate );
-                const { renderer, scene, camera } = threeContext;
+                const { renderer, scene, camera, controls } = threeContext;
                 renderer.render( scene, camera );
+                controls.update();
             }
             animate();
         });

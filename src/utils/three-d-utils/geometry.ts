@@ -1,12 +1,50 @@
-import { BoxGeometry, CircleGeometry, ConeGeometry, CylinderGeometry, PlaneGeometry, RingGeometry, SphereGeometry, TorusGeometry, TubeGeometry } from "three";
+import { BoxGeometry, CircleGeometry, ConeGeometry, CylinderGeometry, PlaneGeometry, RingGeometry, SphereGeometry, TorusGeometry } from "three";
 import { GeometryWrapper } from "./models/geometry";
+import { createField } from "../gui-data-utils/input-fields";
+
+const boxFields = {
+    description: [
+        { name: 'Dimensions', sub: [
+            { name: 'Width' },
+            { name: 'Height' },
+            { name: 'Depth' },
+        ]},
+        { name: 'Segments', sub: [
+            { name: 'Width' },
+            { name: 'Height' },
+            { name: 'Depth' },
+        ]}
+    ],
+    dimensions: {
+        width: createField('width', 1),
+        height: createField('height', 1),
+        depth: createField('depth', 1)
+    },
+    segments: {
+        width: createField('width', 1),
+        height: createField('height', 1),
+        depth: createField('depth', 1)
+    }
+};
 
 const boxGeometry: GeometryWrapper = {
     name: 'Box',
-    position: { x: 1, y: 1, z: 1 },
+    fields: boxFields,
+    position: { x: 0, y: 0, z: 0 },
     rotation: { x: 0, y: 0, z: 0 },
     create: () => {
-        const geom = new BoxGeometry(boxGeometry.position.x, boxGeometry.position.y, boxGeometry.position.z );
+        const geom = new BoxGeometry(
+            boxGeometry.fields?.dimensions.width.getValue(),
+            boxGeometry.fields?.dimensions.height.getValue(),
+            boxGeometry.fields?.dimensions.depth.getValue(),
+            boxGeometry.fields?.segments.width.getValue(),
+            boxGeometry.fields?.segments.height.getValue(),
+            boxGeometry.fields?.segments.depth.getValue()
+        );
+        geom.rotateX(boxGeometry.rotation.x);
+        geom.rotateY(boxGeometry.rotation.y);
+        geom.rotateZ(boxGeometry.rotation.z);
+        geom.translate(boxGeometry.position.x, boxGeometry.position.y, boxGeometry.position.z);
         return geom;
     }       
 }

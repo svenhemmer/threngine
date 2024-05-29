@@ -1,41 +1,65 @@
 <template>
     <div>Element Widget</div>
-    <fieldset><legend>Geometry</legend>
-        <span>Type: <select v-model="geoType">
-            <option v-for="(geom, index) in geometries" :value="index">{{ geom.name }}</option>
-        </select></span>
-        <fieldset><legend>Position</legend>
-            <span>x: <input v-model="x"></span>
-            <span>y: <input v-model="y"></span>
-            <span>z: <input v-model="z"></span>
+    <div class="form">
+        <fieldset><legend>Geometry</legend>
+            <span>Type: <select v-model="geoType">
+                <option v-for="(geom, index) in geometries" :value="index">{{ geom.name }}</option>
+            </select></span>
+            <fieldset v-if="!!geometries[geoType].fields"><legend>Geometry specific</legend>
+                <fieldset v-for="section in getFields()"><legend>{{ section.name }}</legend>
+                    <span v-for="field in section.subs">{{ field.name }}: <input v-model="y"></span>
+                </fieldset>
+            </fieldset>
+            <fieldset><legend>Position</legend>
+                <span>x: <input v-model="x"></span>
+                <span>y: <input v-model="y"></span>
+                <span>z: <input v-model="z"></span>
+            </fieldset>
+            <fieldset><legend>Rotation</legend>
+                <span>x: <input v-model="rx"></span>
+                <span>y: <input v-model="ry"></span>
+                <span>z: <input v-model="rz"></span>
+            </fieldset>
         </fieldset>
-        <fieldset><legend>Rotation</legend>
-            <span>x: <input v-model="rx"></span>
-            <span>y: <input v-model="ry"></span>
-            <span>z: <input v-model="rz"></span>
+        <fieldset><legend>Material</legend>
+            <span>Color: <input v-model="color"></span>
         </fieldset>
-    </fieldset>
-    <fieldset><legend>Material</legend>
-        <span>Color: <input v-model="color"></span>
-    </fieldset>
-    <input type="button" value="Add" @click="addElement()">
+        <input type="button" value="Add" @click="addElement()">
+    </div>
 </template>
 
 <script lang="ts">
 
 import * as THREE from 'three';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { geometries as geoms } from '../../utils/three-d-utils';
 import { useThreeStore } from '../../stores';
 
 import type { GeometryWrapper } from '../../utils/three-d-utils/models';
+import type { FieldDescription } from '../../utils/gui-data-utils/models';
+
+type GuiFieldInfo = {
+    name: string;
+    fieldAccessor: string;
+    hasSubs: boolean;
+    subs?: GuiFieldInfo[];
+}
+
+const mapFields = (description: FieldDescription): GuiFieldInfo => {
+    return {
+        name: description.name,
+        fieldAccessor: description.field,
+        hasSubs: !!description.sub,
+        subs: description.sub?.map(mapFields)
+    }
+}
 
 export default defineComponent({
     setup() {
 
         const store = useThreeStore();
 
-        const geometries = ref(geoms);
+        const geometries = geoms;
 
         const x = ref(0);
         const y = ref(0);
@@ -48,25 +72,75 @@ export default defineComponent({
 
         const color = ref('#00ff00');
 
-        const addElement = () => {
-            const wrapper: GeometryWrapper = geometries.value[geoType.value];
+        let lines: THREE.LineSegments<any> | null = null;
+        let element: THREE.Mesh<any> | null = null;
+
+        const getFields = (): GuiFieldInfo[] => {
+            const geom = geometries[geoType.value];
+            if (!geom.fields) {
+                return [] as GuiFieldInfo[];
+            }
+            return geom.fields!.description.map(mapFields);
+        }
+
+        const validateEntries = () => {
+            return !isNaN(x.value) &&
+                !isNaN(y.value) &&
+                !isNaN(z.value) &&
+                !isNaN(rx.value) &&
+                !isNaN(ry.value) &&
+                !isNaN(rz.value);
+        }
+
+        const previewElement = () => {
+            const wrapper: GeometryWrapper = geometries[geoType.value];
             
             const { threeContext } = store;
+            if (!!element && !!lines) {
+                threeContext.scene.remove(lines);
+                threeContext.scene.remove(element);   
+            }
+            if (!validateEntries()) {
+                return;
+                
+            }
 
             const geometry = wrapper.create();
-            // const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-            const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-            const element = new THREE.Mesh( geometry, material );
-            console.log(geometry, material, element);
+            geometry.rotateX(rx.value);
+            geometry.rotateY(ry.value);
+            geometry.rotateZ(rz.value);
+
+            const material = new THREE.MeshBasicMaterial( { color: color.value, blendAlpha: .5 } );
+            element = new THREE.Mesh( geometry, material );
+            element.position.set(x.value, y.value, z.value)
+
+            const lineMaterial = new THREE.LineBasicMaterial( { color: color.value } );
+            lines = new THREE.LineSegments( geometry, lineMaterial );
+            lines.position.set(x.value, y.value, z.value)
             
+            threeContext.scene.add(lines);
             threeContext.scene.add(element);
+
         }
+
+        const addElement = () => {
+            console.log('Add... to be implemented');
+            
+        }
+
+        watch(x, previewElement);
+        watch(y, previewElement);
+        watch(z, previewElement);
+        watch(rx, previewElement);
+        watch(ry, previewElement);
+        watch(rz, previewElement);
+        watch(color, previewElement);
 
         return {
             x, y, z,
             rx, ry, rz,
             color, geometries, geoType,
-            addElement
+            addElement, getFields
         }
     }
 })
@@ -76,5 +150,14 @@ export default defineComponent({
 fieldset {
     display: flex;
     flex-direction: column;
+    border-radius: .5rem;
+    padding: .5rem;
+    gap: .25rem
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
 }
 </style>

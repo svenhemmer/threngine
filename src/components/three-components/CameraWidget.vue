@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, watch } from 'vue';
 import { useThreeStore } from '../../stores';
 
 const event2Number = (event: Event) => {
@@ -60,6 +60,16 @@ export default defineComponent({
                 }
             }
         }
+
+        watch(camera.rotation, () => {
+            console.log('Rotation change', camera.rotation);
+            
+        })
+
+        watch(camera.position, () => {
+            console.log('Position change', camera.position);
+            
+        })
 
         return {
             camera, changePosition, changeRotation
