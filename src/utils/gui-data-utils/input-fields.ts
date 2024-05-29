@@ -6,7 +6,7 @@ export const createField = <FieldType extends number | string | boolean>(name: s
     const setValue = (value: string) => { 
         switch (typeof _value) {
             case 'number': 
-                _value = parseFloat(value) as FieldType;
+                _value = parseFloat(value).toFixed(2) as FieldType;
                 break;
             case 'boolean':
                 _value = (value.toLocaleLowerCase() === 'true') as FieldType;

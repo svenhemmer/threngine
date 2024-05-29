@@ -2,30 +2,18 @@ import { BoxGeometry, CircleGeometry, ConeGeometry, CylinderGeometry, PlaneGeome
 import { GeometryWrapper } from "./models/geometry";
 import { createField } from "../gui-data-utils/input-fields";
 
-const boxFields = {
-    description: [
-        { name: 'Dimensions', field: 'dimensions', sub: [
-            { name: 'Width', field: 'width' },
-            { name: 'Height', field: 'height' },
-            { name: 'Depth', field: 'depth' },
+const boxFields = [
+        { name: 'Dimensions', sub: [
+            { name: 'Width', field: createField('width', 1) },
+            { name: 'Height', field: createField('height', 1) },
+            { name: 'Depth', field: createField('depth', 1) },
         ]},
-        { name: 'Segments', field: 'segements', sub: [
-            { name: 'Width', field: 'width' },
-            { name: 'Height', field: 'height' },
-            { name: 'Depth', field: 'depth' },
+        { name: 'Segments for', sub: [
+            { name: 'Width', field: createField('width', 1) },
+            { name: 'Height', field: createField('height', 1) },
+            { name: 'Depth', field: createField('depth', 1) },
         ]}
-    ],
-    dimensions: {
-        width: createField('width', 1),
-        height: createField('height', 1),
-        depth: createField('depth', 1)
-    },
-    segments: {
-        width: createField('width', 1),
-        height: createField('height', 1),
-        depth: createField('depth', 1)
-    }
-};
+    ];
 
 const boxGeometry: GeometryWrapper = {
     name: 'Box',
@@ -34,12 +22,12 @@ const boxGeometry: GeometryWrapper = {
     rotation: { x: 0, y: 0, z: 0 },
     create: () => {
         const geom = new BoxGeometry(
-            boxGeometry.fields?.dimensions.width.getValue(),
-            boxGeometry.fields?.dimensions.height.getValue(),
-            boxGeometry.fields?.dimensions.depth.getValue(),
-            boxGeometry.fields?.segments.width.getValue(),
-            boxGeometry.fields?.segments.height.getValue(),
-            boxGeometry.fields?.segments.depth.getValue()
+            boxGeometry.fields![0].sub![0].field!.getValue() as number,
+            boxGeometry.fields![0].sub![1].field!.getValue() as number,
+            boxGeometry.fields![0].sub![2].field!.getValue() as number,
+            boxGeometry.fields![1].sub![0].field!.getValue() as number,
+            boxGeometry.fields![1].sub![1].field!.getValue() as number,
+            boxGeometry.fields![1].sub![2].field!.getValue() as number
         );
         geom.rotateX(boxGeometry.rotation.x);
         geom.rotateY(boxGeometry.rotation.y);

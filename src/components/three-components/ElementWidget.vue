@@ -7,7 +7,9 @@
             </select></span>
             <fieldset v-if="!!geometries[geoType].fields"><legend>Geometry specific</legend>
                 <fieldset v-for="section in getFields()"><legend>{{ section.name }}</legend>
-                    <span v-for="field in section.subs">{{ field.name }}: <input v-model="y"></span>
+                    <span v-for="field in section.subs">{{ field.name }}: 
+                        <input v-bind:value="field.field!.getValue()" @keyup="(event) => updateValue(event, field.field!)">
+                    </span>
                 </fieldset>
             </fieldset>
             <fieldset><legend>Position</legend>
@@ -35,20 +37,20 @@ import { defineComponent, ref, watch } from 'vue';
 import { geometries as geoms } from '../../utils/three-d-utils';
 import { useThreeStore } from '../../stores';
 
-import type { GeometryWrapper } from '../../utils/three-d-utils/models';
-import type { FieldDescription } from '../../utils/gui-data-utils/models';
+import type { EnhancedFieldDescription, GeometryWrapper } from '../../utils/three-d-utils/models';
+import type { Field } from '../../utils/gui-data-utils/models';
 
 type GuiFieldInfo = {
     name: string;
-    fieldAccessor: string;
+    field?: Field<number | boolean | string>;
     hasSubs: boolean;
     subs?: GuiFieldInfo[];
 }
 
-const mapFields = (description: FieldDescription): GuiFieldInfo => {
+const mapFields = (description: EnhancedFieldDescription<number | boolean | string> ): GuiFieldInfo => {
     return {
         name: description.name,
-        fieldAccessor: description.field,
+        field: description.field,
         hasSubs: !!description.sub,
         subs: description.sub?.map(mapFields)
     }
@@ -80,7 +82,7 @@ export default defineComponent({
             if (!geom.fields) {
                 return [] as GuiFieldInfo[];
             }
-            return geom.fields!.description.map(mapFields);
+            return geom.fields!.map(mapFields);
         }
 
         const validateNumberEntries = () => {
@@ -106,7 +108,6 @@ export default defineComponent({
             }
             if (!validateNumberEntries() || !validateColorEntry()) {
                 return;
-                
             }
 
             const geometry = wrapper.create();
@@ -134,6 +135,12 @@ export default defineComponent({
             
         }
 
+        const updateValue = (event: Event, field: Field<number | boolean | string>) => {
+            var target = event.target as HTMLInputElement;
+            field.setValue(target.value);
+            previewElement();
+        }
+
         watch(x, previewElement);
         watch(y, previewElement);
         watch(z, previewElement);
@@ -146,7 +153,7 @@ export default defineComponent({
             x, y, z,
             rx, ry, rz,
             color, geometries, geoType,
-            addElement, getFields
+            addElement, getFields, updateValue
         }
     }
 })

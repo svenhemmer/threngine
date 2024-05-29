@@ -8,6 +8,4 @@ export type Field<FType extends number | string | boolean> = {
 
 export type FieldDescription = {
     name: string;
-    field: string;
-    sub?: FieldDescription[]; 
 }
