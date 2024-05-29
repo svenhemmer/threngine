@@ -142,12 +142,29 @@ const cylinderGeometry: GeometryWrapper = {
     }       
 }
 
+const planeFields = [
+    { name: 'Dimensions', sub: [
+        { name: 'Width', field: createField('width', 1) },
+        { name: 'Height', field: createField('height', 1) }
+    ]},
+    { name: 'Segments', sub: [
+        { name: 'Width', field: createField('width', 5) },
+        { name: 'Height', field: createField('height', 5) }
+    ]}
+];
+
 const planeGeometry: GeometryWrapper = {
     name: 'Plane',
+    fields: planeFields,
     position: { x: 1, y: 1, z: 1 },
     rotation: { x: 0, y: 0, z: 0 },
     create: () => {
-        const geom = new PlaneGeometry(planeGeometry.position.x, planeGeometry.position.y, planeGeometry.position.z );
+        const geom = new PlaneGeometry(
+            planeGeometry.fields![0].sub![0].field!.getValue() as number,
+            planeGeometry.fields![0].sub![1].field!.getValue() as number,
+            planeGeometry.fields![1].sub![0].field!.getValue() as number,
+            planeGeometry.fields![1].sub![1].field!.getValue() as number,
+        );
         return geom;
     }       
 }
