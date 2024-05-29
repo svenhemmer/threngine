@@ -4,15 +4,15 @@ import { createField } from "../gui-data-utils/input-fields";
 
 const boxFields = {
     description: [
-        { name: 'Dimensions', sub: [
-            { name: 'Width' },
-            { name: 'Height' },
-            { name: 'Depth' },
+        { name: 'Dimensions', field: 'dimensions', sub: [
+            { name: 'Width', field: 'width' },
+            { name: 'Height', field: 'height' },
+            { name: 'Depth', field: 'depth' },
         ]},
-        { name: 'Segments', sub: [
-            { name: 'Width' },
-            { name: 'Height' },
-            { name: 'Depth' },
+        { name: 'Segments', field: 'segements', sub: [
+            { name: 'Width', field: 'width' },
+            { name: 'Height', field: 'height' },
+            { name: 'Depth', field: 'depth' },
         ]}
     ],
     dimensions: {
