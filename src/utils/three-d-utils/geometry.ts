@@ -42,11 +42,11 @@ const circleFields = [
         { name: 'Radius', field: createField('radius', 1) }
     ]},
     { name: 'Segments', sub: [
-        { name: 'Amount', field: createField('amount', 5) }
+        { name: 'Amount', field: createField('amount', 20) }
     ]},
     { name: 'Angle', sub: [
         { name: 'Start', field: createField('start', 0) },
-        { name: 'End', field: createField('end', 2 * Math.PI) }
+        { name: 'Length', field: createField('length', 2 * Math.PI) }
     ]}
 ];
 
@@ -70,12 +70,37 @@ const circleGeometry: GeometryWrapper = {
     }       
 }
 
+const coneFields = [
+    { name: 'Dimensions', sub: [
+        { name: 'Radius', field: createField('radius', 1) },
+        { name: 'Height', field: createField('height', 1) }
+    ]},
+    { name: 'Segments', sub: [
+        { name: 'Radial', field: createField('radial', 20) },
+        { name: 'Height', field: createField('height', 5) },
+        { name: 'Open ended', field: createField('openEnded', false) },
+    ]},
+    { name: 'Angle', sub: [
+        { name: 'Start', field: createField('start', 0) },
+        { name: 'Length', field: createField('length', 2 * Math.PI) }
+    ]}
+];
+
 const coneGeometry: GeometryWrapper = {
     name: 'Cone',
+    fields: coneFields,
     position: { x: 1, y: 1, z: 1 },
     rotation: { x: 0, y: 0, z: 0 },
     create: () => {
-        const geom = new ConeGeometry(coneGeometry.position.x, coneGeometry.position.y, coneGeometry.position.z );
+        const geom = new ConeGeometry(
+            coneGeometry.fields![0].sub![0].field!.getValue() as number,
+            coneGeometry.fields![0].sub![1].field!.getValue() as number,
+            coneGeometry.fields![1].sub![0].field!.getValue() as number,
+            coneGeometry.fields![1].sub![1].field!.getValue() as number,
+            coneGeometry.fields![1].sub![2].field!.getValue() as boolean,
+            coneGeometry.fields![2].sub![0].field!.getValue() as number,
+            coneGeometry.fields![2].sub![1].field!.getValue() as number,
+        );
         return geom;
     }       
 }

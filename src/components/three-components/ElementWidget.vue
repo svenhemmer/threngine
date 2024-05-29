@@ -2,13 +2,22 @@
     <div>Element Widget</div>
     <div class="form">
         <fieldset><legend>Geometry</legend>
-            <span>Type: <select v-model="geoType" @change="cleanup">
+            <span>Type: <select v-model="geoType" @change="() => { cleanup(); previewElement(); }">
                 <option v-for="(geom, index) in geometries" :value="index">{{ geom.name }}</option>
             </select></span>
             <fieldset v-if="!!geometries[geoType].fields"><legend>Geometry specific</legend>
                 <fieldset v-for="section in getFields()"><legend>{{ section.name }}</legend>
                     <span v-for="field in section.subs">{{ field.name }}: 
-                        <input v-bind:value="field.field!.getValue()" @keyup="(event) => updateValue(event, field.field!)">
+                        <input 
+                            v-if="typeof (field.field!.getValue()) === 'boolean'" 
+                            type="checkbox"
+                            :checked="!!field.field!.getValue()"
+                            v-bind:value="field.field!.getValue()" 
+                            @change="(event) => updateCheckbox(event, field.field!)">
+                        <input 
+                            v-else 
+                            v-bind:value="field.field!.getValue()" 
+                            @keyup="(event) => updateValue(event, field.field!)">
                     </span>
                 </fieldset>
             </fieldset>
@@ -33,7 +42,7 @@
 <script lang="ts">
 
 import * as THREE from 'three';
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, watch, onMounted } from 'vue';
 import { geometries as geoms } from '../../utils/three-d-utils';
 import { useThreeStore } from '../../stores';
 
@@ -104,6 +113,8 @@ export default defineComponent({
                 threeContext.scene.remove(lines);
                 threeContext.scene.remove(element);   
             }
+            lines = null;
+            element = null;
         }
 
         const previewElement = () => {
@@ -145,6 +156,14 @@ export default defineComponent({
             previewElement();
         }
 
+        const updateCheckbox = (event: Event, field: Field<number | boolean | string>) => {
+            var target = event.target as HTMLInputElement;
+            field.setValue(target.checked + '');
+            previewElement();
+        }
+
+        onMounted(previewElement);
+
         watch(x, previewElement);
         watch(y, previewElement);
         watch(z, previewElement);
@@ -157,8 +176,9 @@ export default defineComponent({
             x, y, z,
             rx, ry, rz,
             color, geometries, geoType,
-            addElement, getFields, updateValue,
-            cleanup
+            addElement, getFields, 
+            updateValue, updateCheckbox,
+            cleanup, previewElement
         }
     }
 })
