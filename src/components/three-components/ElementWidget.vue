@@ -83,13 +83,17 @@ export default defineComponent({
             return geom.fields!.description.map(mapFields);
         }
 
-        const validateEntries = () => {
+        const validateNumberEntries = () => {
             return !isNaN(x.value) &&
                 !isNaN(y.value) &&
                 !isNaN(z.value) &&
                 !isNaN(rx.value) &&
                 !isNaN(ry.value) &&
                 !isNaN(rz.value);
+        }
+
+        const validateColorEntry = () => {
+            return /^#[0-9A-F]{6}$/i.test(color.value)
         }
 
         const previewElement = () => {
@@ -100,7 +104,7 @@ export default defineComponent({
                 threeContext.scene.remove(lines);
                 threeContext.scene.remove(element);   
             }
-            if (!validateEntries()) {
+            if (!validateNumberEntries() || !validateColorEntry()) {
                 return;
                 
             }
@@ -111,6 +115,8 @@ export default defineComponent({
             geometry.rotateZ(rz.value);
 
             const material = new THREE.MeshBasicMaterial( { color: color.value, blendAlpha: .5 } );
+            material.transparent = true;
+            material.opacity = .3;
             element = new THREE.Mesh( geometry, material );
             element.position.set(x.value, y.value, z.value)
 
