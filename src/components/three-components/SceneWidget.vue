@@ -17,7 +17,7 @@ export default defineComponent({
         const { threeContext } = store;
         const { grid } = threeContext;
 
-        const gridActive = ref(true);
+        const gridActive = ref(grid.isActive());
         const size = ref(grid.getSize());
         const divisions = ref(grid.getDivisions());
 
