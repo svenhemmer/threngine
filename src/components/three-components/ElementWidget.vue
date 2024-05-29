@@ -79,7 +79,7 @@ export default defineComponent({
         const ry = ref(0);
         const rz = ref(0);
 
-        const geoType = ref(0);
+        const geoType = ref(3);
 
         const color = ref('#00ff00');
 
