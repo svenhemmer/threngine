@@ -38,7 +38,7 @@ export default defineComponent({
                 requestAnimationFrame( animate );
                 const { renderer, scene, camera, controls } = threeContext;
                 renderer.render( scene, camera );
-                controls.update();
+                controls.update
             }
             animate();
         });

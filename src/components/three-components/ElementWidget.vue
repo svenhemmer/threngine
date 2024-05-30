@@ -14,8 +14,7 @@
                             :checked="!!field.field!.getValue()"
                             v-bind:value="field.field!.getValue()" 
                             @change="(event) => updateCheckbox(event, field.field!)">
-                        <input 
-                            v-else 
+                        <input  
                             v-bind:value="field.field!.getValue()" 
                             @keyup="(event) => updateValue(event, field.field!)">
                     </span>
@@ -79,7 +78,7 @@ export default defineComponent({
         const ry = ref(0);
         const rz = ref(0);
 
-        const geoType = ref(3);
+        const geoType = ref(0);
 
         const color = ref('#00ff00');
 
@@ -194,6 +193,7 @@ fieldset {
 }
 
 .form {
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: .5rem;
