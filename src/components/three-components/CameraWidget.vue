@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 import { useThreeStore } from '../../stores';
 
 const event2Number = (event: Event) => {

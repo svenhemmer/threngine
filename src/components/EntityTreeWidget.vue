@@ -4,6 +4,7 @@
         <input type="button" @click="toggleScene" :class="isSelected('scene') ? 'selected': ''" value="Scene">
         <input type="button" @click="activateLightWidget" value="Add Light">
         <input type="button" @click="activateElementWidget" value="Add Element">
+        <input type="button" @click="activateImporterWidget" value="Import Element">
     </div>
 </template>
 
@@ -12,6 +13,7 @@ import CameraWidget from './three-components/CameraWidget.vue';
 import ElementWidget from './three-components/ElementWidget.vue';
 import LightWidget from './three-components/LightWidget.vue';
 import SceneWidget from './three-components/SceneWidget.vue';
+import ImporterWidget from './three-components/ImporterWidget.vue';
 
 import { defineComponent } from 'vue';
 import { useSelectionStore } from '../stores';
@@ -43,6 +45,10 @@ export default defineComponent({
             selectionStore.widget = ElementWidget;
         }
 
+        const activateImporterWidget =() => {
+            selectionStore.widget = ImporterWidget;
+        }
+
         const isSelected = (what: 'camera' | 'scene') => {
             switch(what) {
                 case 'camera': return selectionStore.widget == CameraWidget;
@@ -52,7 +58,8 @@ export default defineComponent({
         }
 
         return {
-            activateLightWidget, activateElementWidget, toggleCamera, toggleScene, selectionStore, isSelected
+            activateLightWidget, activateElementWidget, activateImporterWidget,
+            toggleCamera, toggleScene, selectionStore, isSelected
         };
     }
 })

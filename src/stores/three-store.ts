@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { reactive, shallowRef } from 'vue';
 import { threeContext as ctx } from "../utils/three-d-utils";
 import type { LightElement, TreeElement } from "./models/tree-element";
+import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.d.ts';
 
 export const useThreeStore = defineStore('three', () => {
     const threeContext = shallowRef(ctx);
@@ -12,7 +13,9 @@ export const useThreeStore = defineStore('three', () => {
 
     const additionalLights: LightElement[] = reactive([]);
 
+    const glsfModels: GLTF[] = reactive([]);
+
     return {
-        threeContext, elements, ambientLight, additionalLights
+        threeContext, elements, ambientLight, additionalLights, glsfModels
     }
 });
