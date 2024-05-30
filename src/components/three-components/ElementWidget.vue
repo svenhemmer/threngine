@@ -41,7 +41,7 @@
 <script lang="ts">
 
 import * as THREE from 'three';
-import { defineComponent, ref, watch, onMounted } from 'vue';
+import { defineComponent, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { geometries as geoms } from '../../utils/three-d-utils';
 import { useThreeStore } from '../../stores';
 
@@ -145,8 +145,32 @@ export default defineComponent({
         }
 
         const addElement = () => {
-            console.log('Add... to be implemented');
-            
+            const wrapper: GeometryWrapper = geometries[geoType.value];
+            const { threeContext, elements } = store;
+            const geometry = wrapper.create();
+            geometry.rotateX(rx.value);
+            geometry.rotateY(ry.value);
+            geometry.rotateZ(rz.value);
+            const material = new THREE.MeshBasicMaterial( { color: color.value } );
+            const element = new THREE.Mesh( geometry, material );
+            element.position.set(x.value, y.value, z.value)
+            threeContext.scene.add(element);
+
+            elements.push({ geometry, material, element })
+            resetPos();
+            resetRot();
+        }
+
+        const resetPos = () => {
+            x.value = 0;
+            y.value = 0;
+            z.value = 0;
+        }
+
+        const resetRot = () => {
+            rx.value = 0;
+            ry.value = 0;
+            rz.value = 0;
         }
 
         const updateValue = (event: Event, field: Field<number | boolean | string>) => {
@@ -162,6 +186,10 @@ export default defineComponent({
         }
 
         onMounted(previewElement);
+
+        onBeforeUnmount(() => { 
+            cleanup();
+        })
 
         watch(x, previewElement);
         watch(y, previewElement);
