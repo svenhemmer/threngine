@@ -26,6 +26,8 @@ const resizeRatio = ({ width, height }: { width: number, height: number}) => {
     camera.updateProjectionMatrix();
 }
 
+scene.add( new THREE.AmbientLight('#ffffff', 1) );
+
 activateAssistanceGrid();
 
 export const threeContext = {

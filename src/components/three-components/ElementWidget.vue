@@ -151,7 +151,7 @@ export default defineComponent({
             geometry.rotateX(rx.value);
             geometry.rotateY(ry.value);
             geometry.rotateZ(rz.value);
-            const material = new THREE.MeshBasicMaterial( { color: color.value } );
+            const material = new THREE.MeshPhongMaterial( { color: color.value } );
             const element = new THREE.Mesh( geometry, material );
             element.position.set(x.value, y.value, z.value)
             threeContext.scene.add(element);
