@@ -1,6 +1,6 @@
 import { TorusGeometry } from "three";
 import { createField } from "../../gui-data-utils/input-fields";
-import { DEFAULT_POS, DEFAULT_ROT } from "./constants";
+import { DEFAULT_POS, DEFAULT_ROT, FULL_CIRCLE_ARC } from "./constants";
 
 import type { GeometryWrapper } from "../models/geometry";
 
@@ -11,10 +11,10 @@ const torusFields = [
     ]},
     { name: 'Segments', sub: [
         { name: 'Radial', field: createField('radial', 20) },
-        { name: 'Tubular', field: createField('tubular', 5) }
+        { name: 'Tubular', field: createField('tubular', 20) }
     ]},
     { name: 'Angle', sub: [
-        { name: 'Arc', field: createField('arc', 0) },
+        { name: 'Arc', field: createField('arc', FULL_CIRCLE_ARC) },
     ]}
 ];
 

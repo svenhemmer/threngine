@@ -1,6 +1,6 @@
 import { SphereGeometry } from "three";
 import { createField } from "../../gui-data-utils/input-fields";
-import { DEFAULT_POS, DEFAULT_ROT } from "./constants";
+import { DEFAULT_POS, DEFAULT_ROT, FULL_CIRCLE_ARC } from "./constants";
 
 import type { GeometryWrapper } from "../models/geometry";
 
@@ -14,9 +14,9 @@ const sphereFields = [
     ]},
     { name: 'Angle', sub: [
         { name: 'Phi start', field: createField('phiStart', 0) },
-        { name: 'Phi length', field: createField('phiLength', 2 * Math.PI) },
+        { name: 'Phi length', field: createField('phiLength', FULL_CIRCLE_ARC) },
         { name: 'Theta start', field: createField('thetaStart', 0) },
-        { name: 'Theta length', field: createField('thetaLength', 2 * Math.PI) }
+        { name: 'Theta length', field: createField('thetaLength', FULL_CIRCLE_ARC) }
     ]}
 ];
 export const sphereGeometry: GeometryWrapper = {

@@ -1,6 +1,6 @@
 import { CylinderGeometry } from "three";
 import { createField } from "../../gui-data-utils/input-fields";
-import { DEFAULT_POS, DEFAULT_ROT } from "./constants";
+import { DEFAULT_POS, DEFAULT_ROT, FULL_CIRCLE_ARC } from "./constants";
 
 import type { GeometryWrapper } from "../models/geometry";
 
@@ -17,7 +17,7 @@ const cylinderFields = [
     ]},
     { name: 'Angle', sub: [
         { name: 'Start', field: createField('start', 0) },
-        { name: 'Length', field: createField('length', 2 * Math.PI) }
+        { name: 'Length', field: createField('length', FULL_CIRCLE_ARC) }
     ]}
 ];
 
